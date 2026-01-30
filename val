@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Video background */
+    .bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -2;
+    }
+
+    /* Dark overlay */
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: -1;
+    }
+
+    .container {
+        max-width: 360px;
+        background: rgba(255,255,255,0.96);
+        padding: 25px;
+        border-radius: 22px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+        animation: pop 0.8s ease;
+    }
+
+    @keyframes pop {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    img {
+        width: 220px;
+        border-radius: 16px;
+        margin-bottom: 15px;
+    }
+
+    .apology {
+        font-size: 15px;
+        color: #333;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    .countdown {
+        font-weight: bold;
+        color: #e63946;
+        margin-bottom: 12px;
+        animation: pulse 1.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+        from { opacity: 0.6; }
+        to { opacity: 1; }
+    }
+
+    h1 {
+        font-size: 1.4rem;
+        color: #e63946;
+        margin-bottom: 12px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 18px;
+        min-height: 90px;
+    }
+
+    button {
+        padding: 10px 24px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #yes-btn {
+        background: #e63946;
+        color: #fff;
+    }
+
+    #no-btn {
+        background: #ddd;
+        color: #333;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Video Background -->
+<video class="bg-video" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+</video>
+<div class="overlay"></div>
+
+<div class="container">
+<video id="display-video" autoplay muted loop playsinline>
+    <source src="card.mp4" type="video/mp4">
+</video>        
+alt="For You">
+<div class="apology">
+        I made a mistake and I hurt you.<br>
+        I take full responsibility, and I’m truly sorry.<br>
+        You mean more to me than my actions showed.
+    </div>
+<div class="countdown" id="countdown"></div>
+<h1 id="question-text">Will you be my Valentine? ❤️</h1>
+ <div class="buttons">
+        <button id="yes-btn">Yes 💖</button>
+        <button id="no-btn">No 😢</button>
+    </div>
+</div>
+<script>
+    const yesBtn = document.getElementById("yes-btn");
+    const noBtn = document.getElementById("no-btn");
+    const questionText = document.getElementById("question-text");
+    const mainImg = document.getElementById("display-image");
+    const countdownEl = document.getElementById("countdown");
+/* Countdown */
+    const valentineDate = new Date("Feb 14, 2026 00:00:00").getTime();
+    setInterval(() => {
+        const now = new Date().getTime();
+        const diff = valentineDate - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        countdownEl.innerHTML = days > 0
+            ? `${days} days until Valentine’s Day 💕`
+            : `💘 It’s Valentine’s Day!`;
+    }, 1000);
+/* No button messages */
+    const messages = [
+        "Are you sure? 🥺",
+        "Babe please 😭",
+        "Just say yes 💔",
+        "You better say yes 😩",
+        "Last chance 😭"
+    ];
+    let noCount = 0;
+
+    noBtn.addEventListener("click", () => {
+        if (noCount < messages.length) {
+            noBtn.innerText = messages[noCount];
+            noBtn.style.transform = "scale(0.9)";
+            setTimeout(() => noBtn.style.transform = "scale(1)", 150);
+            noCount++;
+        } else {
+            yesBtn.click();
+        }
+        const currentSize = parseFloat(getComputedStyle(yesBtn).fontSize);
+        yesBtn.style.fontSize = (currentSize * 1.15) + "px";
+    });
+
+    yesBtn.addEventListener("click", () => {
+        questionText.innerText = "YAYYY!!! ❤️";
+        mainImg.src = "https://media.giphy.com/media/w3vkhtn7qt2bwgpYedjbrw/giphy.gif";
+        document.querySelector(".buttons").style.display = "none";
+        countdownEl.innerHTML = "Thank you for choosing me 🥹";
+    });
+</script>
+</body>
+</html>
